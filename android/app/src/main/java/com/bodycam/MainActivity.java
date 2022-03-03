@@ -34,6 +34,10 @@ public class MainActivity extends ReactActivity {
       new ReactActivityDelegate(this, getMainComponentName())
     );
   }
+  @Override
+protected void onCreate(Bundle savedInstanceState) {
+  super.onCreate(null);
+}
 
   /**
    * Align the back button behavior with Android S

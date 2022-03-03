@@ -1,0 +1,20 @@
+{
+  "dev": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-bodycam-dev-132458-authRole",
+      "UnauthRoleArn": "arn:aws:iam::482800432370:role/amplify-bodycam-dev-132458-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::482800432370:role/amplify-bodycam-dev-132458-authRole",
+      "Region": "us-east-1",
+      "DeploymentBucketName": "amplify-bodycam-dev-132458-deployment",
+      "UnauthRoleName": "amplify-bodycam-dev-132458-unauthRole",
+      "StackName": "amplify-bodycam-dev-132458",
+      "StackId": "arn:aws:cloudformation:us-east-1:482800432370:stack/amplify-bodycam-dev-132458/4a34bdb0-9995-11ec-9b86-12083211e679",
+      "AmplifyAppId": "dxvlnyk0g0dr1"
+    },
+    "categories": {
+      "auth": {
+        "bodycam2fa58d13": {}
+      }
+    }
+  }
+}
