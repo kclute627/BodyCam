@@ -42,7 +42,7 @@ export const AuthProvider: FunctionComponent = ({ children }) => {
     return () => {
       Hub.remove("auth", hubListner);
     };
-  }, []);
+  },[]);
 
   const hubListner = (hubData) => {
     const { data, event } = hubData.payload;

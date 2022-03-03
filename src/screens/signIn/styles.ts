@@ -7,7 +7,6 @@ export const styles = StyleSheet.create({
     backgroundColor: colors.darkblue,
   },
   container2: {
-    
     backgroundColor: colors.darkblue,
   },
   logoView: {
@@ -20,8 +19,6 @@ export const styles = StyleSheet.create({
     width: 200,
   },
   headerView: {
-    
-
     marginBottom: 30,
     justifyContent: "center",
     alignItems: "center",
@@ -97,33 +94,39 @@ export const styles = StyleSheet.create({
     fontWeight: "bold",
   },
   codeText: {
-    textTransform: 'capitalize',
+    textTransform: "capitalize",
     color: colors.white,
     fontSize: 20,
     padding: 10,
-    textAlign: 'center'
+    textAlign: "center",
   },
   center: {
-    justifyContent: 'center',
-    alignItems: 'center'
+    justifyContent: "center",
+    alignItems: "center",
   },
   code: {
-    alignContent: 'flex-start',
-    justifyContent: 'flex-start',
+    alignContent: "flex-start",
+    justifyContent: "flex-start",
     paddingHorizontal: 15,
-    marginTop: -150,
+    marginTop: -90,
   },
   otpInputBox: {
     fontSize: 25,
     backgroundColor: colors.blue,
     color: colors.white,
     padding: 5,
-    
-    
-
   },
   otpActive: {
     borderColor: colors.orange,
     borderWidth: 1,
-  }
+  },
+  resendView: {
+    justifyContent: "center",
+    alignItems: "center",
+    marginTop: -99,
+  },
+  resendText: {
+    color: colors.orange,
+    fontSize: 20,
+  },
 });

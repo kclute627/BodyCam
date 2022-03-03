@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import {
@@ -20,27 +20,38 @@ import { styles } from "../signIn/styles";
 import logo from "../../../assets/logo3.png";
 import { colors } from "../../constants/theme";
 
-export default function Signup({ navigation }) {
+export default function Signup({ navigation, route }) {
   const [formData, setFormData] = useState({
-    email: "jitalo9886@vapaka.com",
+    email: "bju13713@boofx.com",
     password: "12345678",
     confirmPassword: "",
     name: "Kyle C",
   });
   const [loading, setLoading] = useState(false);
   //TODO
-  //make sure we handle unconfirmed username
-  // Resend code button
-  
-  const [step, setStep] = useState<"signUp" | "code">("signUp");
+  // change password
+  // forgot password
+  // google log in 
+  // apple log in 
+  const unconfirmedUsername = route.params?.username;
+  const [step, setStep] = useState<"signUp" | "code">(
+    unconfirmedUsername ? "code" : "signUp"
+  );
+  const [resending, setResending] = useState(false);
 
   const passwordRef = useRef(null);
-  const nameRef = useRef(null);
+
   const emailRef = useRef(null);
   const confirmPasswordRef = useRef(null);
-  const headerHeight = useHeaderHeight();
+
 
   const { name, email, password, confirmPassword } = formData;
+
+  useEffect(() => {
+    if (unconfirmedUsername) {
+      resendCode(unconfirmedUsername);
+    }
+  }, []);
 
   const signUp = async () => {
     setLoading(true);
@@ -53,7 +64,7 @@ export default function Signup({ navigation }) {
           name,
         },
       });
-      console.log(user, "user");
+
       setStep("code");
     } catch (error) {
       Alert.alert("Error!", error.message || "An error has occurred!");
@@ -66,11 +77,19 @@ export default function Signup({ navigation }) {
     try {
       const data = await Auth.confirmSignUp(email, code);
       await Auth.signIn(email, password);
-      navigation.navigate("Home");
     } catch (error) {
       Alert.alert("Error!", error.message || "An error has occurred!");
     }
     setLoading(false);
+  };
+  const resendCode = async (emailAddress: string) => {
+    setResending(true);
+    try {
+      await Auth.resendSignUp(emailAddress);
+    } catch (error) {
+      Alert.alert("Error!", error.message || "An error has occurred!");
+    }
+    setResending(false);
   };
 
   return (
@@ -109,6 +128,19 @@ export default function Signup({ navigation }) {
                     confirmCode(code);
                   }}
                 />
+                <Pressable
+                  style={({ pressed }) => [
+                    { opacity: pressed ? 0.3 : 1 },
+                    styles.resendView,
+                  ]}
+                  onPress={() => resendCode(email)}
+                >
+                  {resending ? (
+                    <ActivityIndicator />
+                  ) : (
+                    <Text style={styles.resendText}>Resend Code</Text>
+                  )}
+                </Pressable>
               </View>
             )}
           </>

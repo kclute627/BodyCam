@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect, useCallback } from "react";
 import {
   View,
   Text,
@@ -17,21 +17,29 @@ import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view
 
 export default function SignIn({ navigation }) {
   const [formData, setFormData] = useState({
-    email: "xekahot556@ketchet.com",
+    email: "bju13713@boofx.com",
     password: "12345678",
   });
   const [loading, setLoading] = useState(false);
   const { email, password } = formData;
-  const signIn = async () => {
+   useEffect(() => {
+     return () => {};
+   }, []);
+  const signIn = useCallback( async () => {
     setLoading(true);
     try {
       await Auth.signIn(email, password);
-      navigation.navigate("Home");
+      
     } catch (error) {
-      Alert.alert("Error", error);
+      ///handle the unconfirmed user
+      if (error.code === "UserNotConfirmedException") {
+        navigation.navigate("SignUp", { username: email });
+      } else {
+        Alert.alert("Error!", error.message || "An error has occured");
+      }
     }
     setLoading(false);
-  };
+  }, []);
 
   const passwordRef = useRef(null);
   //TODO
