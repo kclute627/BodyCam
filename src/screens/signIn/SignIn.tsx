@@ -9,10 +9,15 @@ import {
   ScrollView,
   ActivityIndicator,
 } from "react-native";
+
+import Expo from "expo";
+import { CognitoHostedUIIdentityProvider } from "@aws-amplify/auth";
 import { styles } from "./styles";
+import { InputView } from "../../utils/Helpers";
 import { Auth } from "aws-amplify";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import logo from "../../../assets/logo3.png";
+
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 
 export default function SignIn({ navigation }) {
@@ -22,14 +27,13 @@ export default function SignIn({ navigation }) {
   });
   const [loading, setLoading] = useState(false);
   const { email, password } = formData;
-   useEffect(() => {
-     return () => {};
-   }, []);
-  const signIn = useCallback( async () => {
+  useEffect(() => {
+    return () => {};
+  }, []);
+  const signIn = useCallback(async () => {
     setLoading(true);
     try {
       await Auth.signIn(email, password);
-      
     } catch (error) {
       ///handle the unconfirmed user
       if (error.code === "UserNotConfirmedException") {
@@ -42,10 +46,21 @@ export default function SignIn({ navigation }) {
   }, []);
 
   const passwordRef = useRef(null);
+
+  const googleSignIn = async()=> {
+    try {
+      
+      Auth.federatedSignIn({provider: CognitoHostedUIIdentityProvider.Google})
+      
+    } catch (error) {
+      Alert.alert("Error!", error.message || "An error has occured");
+      
+    }
+  }
   //TODO
 
   //Handle unconfirmedusername
-  //Handle log in with apple and google 
+  //Handle log in with apple and google
 
   return (
     <KeyboardAwareScrollView
@@ -62,50 +77,34 @@ export default function SignIn({ navigation }) {
         <Text style={styles.subHeader}>Please Sign In</Text>
       </View>
       <View style={styles.signInView}>
-        <View style={styles.inputView}>
-          <MaterialCommunityIcons
-            name="email-outline"
-            color="white"
-            size={30}
-            style={styles.icon}
-          />
-          <TextInput
-            style={styles.signInInput}
-            autoCompleteType="email"
-            value={email}
-            keyboardType="email-address"
-            placeholder="email"
-            placeholderTextColor={"gray"}
-            returnKeyType="next"
-            onSubmitEditing={() => {
-              passwordRef.current?.focus();
-            }}
-            onChangeText={(value) => {
-              setFormData({ ...formData, email: value });
-            }}
-          />
-        </View>
-        <View style={[styles.inputView, { marginTop: 35 }]}>
-          <MaterialCommunityIcons
-            name="lock-outline"
-            color="white"
-            size={30}
-            style={styles.icon}
-          />
-          <TextInput
-            style={styles.signInInput}
-            autoCompleteType="password"
-            secureTextEntry={true}
-            value={password}
-            placeholder="password"
-            placeholderTextColor={"gray"}
-            onChangeText={(value) => {
-              setFormData({ ...formData, password: value });
-            }}
-            returnKeyType="done"
-            ref={passwordRef}
-          />
-        </View>
+        <InputView
+          icon="email-outline"
+          autoCompleteType="email"
+          placeholder="Email"
+          returnKeyType="next"
+          value={email}
+          refs={passwordRef}
+          setFormData={setFormData}
+          formData={formData}
+          title="email"
+          padding={false}
+          secureTextEntry={false}
+        />
+        <InputView
+          icon="lock-outline"
+          autoCompleteType="password"
+          placeholder="Password"
+          returnKeyType="done"
+          value={password}
+          refs={null}
+          setFormData={setFormData}
+          formData={formData}
+          title="password"
+          padding={true}
+          secureTextEntry={true}
+        />
+
+
         <Pressable
           style={styles.passwordLink}
           onPress={() => {
@@ -113,6 +112,9 @@ export default function SignIn({ navigation }) {
           }}
         >
           <Text style={styles.passwordLinkText}>Forgot you password?</Text>
+        </Pressable>
+        <Pressable onPress={googleSignIn}>
+          <Text>Sign in With Google</Text>
         </Pressable>
         <View style={styles.btnView}>
           <Pressable

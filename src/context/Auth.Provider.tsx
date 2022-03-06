@@ -10,8 +10,12 @@ import React, {
 } from "react";
 import { Auth, Hub } from "aws-amplify";
 import AppLoading from "expo-app-loading";
-import {useFonts, Tajawal_400Regular, Tajawal_300Light, Tajawal_700Bold} from '@expo-google-fonts/tajawal'
-
+import {
+  useFonts,
+  Tajawal_400Regular,
+  Tajawal_300Light,
+  Tajawal_700Bold,
+} from "@expo-google-fonts/tajawal";
 
 type AuthContextTypes = {
   user: { [key: string]: any } | null;
@@ -28,12 +32,11 @@ export const AuthProvider: FunctionComponent = ({ children }) => {
   const [user, setUser] = useState<null | { [key: string]: any }>(null);
   const [authLoded, setAuthLoded] = useState(false);
 
-
   const [fontsLoaded] = useFonts({
     Tajawal_400Regular,
     Tajawal_300Light,
-    Tajawal_700Bold
-  })
+    Tajawal_700Bold,
+  });
 
   useEffect(() => {
     checkUser();
@@ -42,7 +45,7 @@ export const AuthProvider: FunctionComponent = ({ children }) => {
     return () => {
       Hub.remove("auth", hubListner);
     };
-  },[]);
+  }, []);
 
   const hubListner = (hubData) => {
     const { data, event } = hubData.payload;
@@ -54,6 +57,8 @@ export const AuthProvider: FunctionComponent = ({ children }) => {
       case "signIn":
         setUser(data);
         break;
+      case "customOAuthState":
+        setUser(data);
       default:
         break;
     }

@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
-import { MaterialCommunityIcons } from "@expo/vector-icons";
+import {InputView} from '../../utils/Helpers'
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import {
   View,
@@ -15,7 +15,6 @@ import {
 } from "react-native";
 import OTPInput from "@twotalltotems/react-native-otp-input";
 import { Auth } from "aws-amplify";
-import { useHeaderHeight } from "@react-navigation/elements";
 import { styles } from "../signIn/styles";
 import logo from "../../../assets/logo3.png";
 import { colors } from "../../constants/theme";
@@ -31,8 +30,8 @@ export default function Signup({ navigation, route }) {
   //TODO
   // change password
   // forgot password
-  // google log in 
-  // apple log in 
+  // google log in
+  // apple log in
   const unconfirmedUsername = route.params?.username;
   const [step, setStep] = useState<"signUp" | "code">(
     unconfirmedUsername ? "code" : "signUp"
@@ -43,7 +42,6 @@ export default function Signup({ navigation, route }) {
 
   const emailRef = useRef(null);
   const confirmPasswordRef = useRef(null);
-
 
   const { name, email, password, confirmPassword } = formData;
 
@@ -147,104 +145,58 @@ export default function Signup({ navigation, route }) {
         )}
         {step === "signUp" && (
           <View style={styles.signInView}>
-            <View style={styles.inputView}>
-              <MaterialCommunityIcons
-                name="account-outline"
-                color="white"
-                size={30}
-                style={styles.icon}
-              />
-              <TextInput
-                style={styles.signInInput}
-                autoCompleteType="name"
-                keyboardType="default"
-                placeholder="Name"
-                placeholderTextColor={"gray"}
-                returnKeyType="next"
-                value={name}
-                onSubmitEditing={() => {
-                  emailRef.current?.focus();
-                }}
-                onChangeText={(value) => {
-                  setFormData({ ...formData, name: value });
-                }}
-              />
-            </View>
-            <View style={[styles.inputView, { paddingTop: 35 }]}>
-              <MaterialCommunityIcons
-                name="email-outline"
-                color="white"
-                size={30}
-                style={styles.icon}
-              />
-              <TextInput
-                style={styles.signInInput}
-                autoCompleteType="email"
-                keyboardType="email-address"
-                placeholder="Email"
-                placeholderTextColor={"gray"}
-                returnKeyType="next"
-                value={email}
-                ref={emailRef}
-                onSubmitEditing={() => {
-                  passwordRef.current?.focus();
-                }}
-                onChangeText={(value) => {
-                  setFormData({ ...formData, email: value });
-                }}
-              />
-            </View>
-            <View style={[styles.inputView, { paddingTop: 35 }]}>
-              <MaterialCommunityIcons
-                name="lock-outline"
-                color="white"
-                size={30}
-                style={styles.icon}
-              />
-              <TextInput
-                style={styles.signInInput}
-                autoCompleteType="password"
-                value={password}
-                secureTextEntry={true}
-                placeholder="Password"
-                placeholderTextColor={"gray"}
-                onChangeText={(value) => {
-                  setFormData({ ...formData, password: value });
-                }}
-                onSubmitEditing={() => {
-                  confirmPasswordRef.current?.focus();
-                }}
-                returnKeyType="next"
-                ref={passwordRef}
-              />
-            </View>
-            <View style={[styles.inputView, { marginTop: 35 }]}>
-              <MaterialCommunityIcons
-                name="lock-outline"
-                color="white"
-                size={30}
-                style={styles.icon}
-              />
-              <TextInput
-                style={
-                  confirmPassword.length > 1 && confirmPassword !== password
-                    ? [styles.signInInput, { borderBottomColor: "red" }]
-                    : confirmPassword.length > 2 && confirmPassword === password
-                    ? [styles.signInInput, { borderBottomColor: "green" }]
-                    : [styles.signInInput, { borderBottomColor: "white" }]
-                }
-                autoCompleteType="password"
-                secureTextEntry={true}
-                value={confirmPassword}
-                placeholder="Confirm Password"
-                placeholderTextColor={"gray"}
-                onChangeText={(value) => {
-                  setFormData({ ...formData, confirmPassword: value });
-                }}
-                returnKeyType="done"
-                ref={confirmPasswordRef}
-              />
-            </View>
+            <InputView
+              icon="account-outline"
+              autoCompleteType="name"
+              placeholder="Name"
+              returnKeyType="next"
+              value={name}
+              refs={emailRef}
+              setFormData={setFormData}
+              formData={formData}
+              title="name"
+              padding={false}
+              secureTextEntry={false}
+            />
+            <InputView
+              icon="email-outline"
+              autoCompleteType="email"
+              placeholder="Email"
+              returnKeyType="next"
+              value={email}
+              refs={passwordRef}
+              setFormData={setFormData}
+              formData={formData}
+              title="email"
+              padding={true}
+              secureTextEntry={false}
+            />
+            <InputView
+              icon="lock-outline"
+              autoCompleteType="password"
+              placeholder="Password"
+              returnKeyType="next"
+              value={password}
+              refs={confirmPasswordRef}
+              setFormData={setFormData}
+              formData={formData}
+              title="password"
+              padding={true}
+              secureTextEntry={true}
+            />
+            <InputView
+              icon="lock-outline"
+              autoCompleteType="password"
+              placeholder="Confirm Password"
+              returnKeyType="next"
+              value={password}
+              refs={null}
+              setFormData={setFormData}
+              formData={formData}
+              title="confirmPassword"
+              padding={true}
+              secureTextEntry={true}
+            />
 
             <View style={styles.btnView}>
               <Pressable
@@ -277,3 +229,4 @@ export default function Signup({ navigation, route }) {
     </KeyboardAwareScrollView>
   );
 }
+

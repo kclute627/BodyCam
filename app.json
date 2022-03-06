@@ -5,6 +5,12 @@
     "version": "1.0.0",
     "assetBundlePatterns": [
       "**/*"
-    ]
+    ],
+    "android": {
+      "package": "com.kclutte627.bodyCam"
+    },
+    "ios": {
+      "bundleIdentifier": "com.kclutte627.bodyCam"
+    }
   }
 }
